@@ -10,7 +10,9 @@ def open_new_interface():
     new_window = tk.Toplevel(root)
     new_window.title ("New Interface")
     Back_Button = tk.Button(new_window, text = "Back", command = close_window)
-    Back_Button.pack()
+    Back_Button.pack(side = tk.BOTTOM)
+ 
+    
 def close_window():
     root.destroy()
 Rebound_Button = tk.Button(root, text = "Rebound", command = open_new_interface)
