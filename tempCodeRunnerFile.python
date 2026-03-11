@@ -1,0 +1,31 @@
+import tkinter as tk
+
+root = tk.Tk()
+root.title("Main interface")
+root.attributes("-fullscreen", True)
+
+def open_new_interface():
+    root.attributes("-fullscreen", False)  # remove fullscreen from main window
+
+    new_window = tk.Toplevel(root)
+    new_window.title("New Interface")
+    new_window.attributes("-fullscreen", True)
+
+    back_button = tk.Button(new_window, text="Back",
+                            command=lambda: close_new(new_window))
+    back_button.pack(side=tk.BOTTOM)
+
+def close_new(win):
+    win.destroy()
+    root.attributes("-fullscreen", True)  # restore main window fullscreen
+
+def close_window():
+    root.destroy()
+
+rebound_button = tk.Button(root, text="Rebound", command=open_new_interface)
+rebound_button.pack()
+
+finish_button = tk.Button(root, text="Finish", command=close_window)
+finish_button.pack()
+
+root.mainloop()
