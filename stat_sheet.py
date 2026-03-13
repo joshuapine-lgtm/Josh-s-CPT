@@ -4,6 +4,15 @@ import turtle as trtl
 root = tk.Tk()
 #Defining Main GUI Functions
 
+root.title("Main interface")
+root.geometry("1200x750")
+
+#code from google
+root.columnconfigure(0, weight=1)
+root.columnconfigure(1, weight=1)
+root.rowconfigure(1, weight=1)
+
+#Interface creation and deletion defined
 def open_new_interface():
     # create a simple new window
     new_window = tk.Toplevel(root)
@@ -18,45 +27,76 @@ def close_new(win):
 def end_program():
     root.destroy()
 
-#GUI
-root.title("Main interface")
-root.geometry("1200x750")
-Color_label = tk.Label(root, text="Enter left team's color: ",  compound="center",
-    font=("times new roman", 14), bd=0, relief=tk.FLAT,)
-Color_label.pack(side=tk.LEFT)
-listbox = tk.Listbox(root, height = 6, width = 50)
-team_colors = ["green", "red", "blue", "purple", "yellow","white", "black"]
+# Top labels
+Color_label = tk.Label(root, text="Enter each team's color:", compound="center",
+    font=("times new roman", 14))
+Color_label.grid(row=0, column=0, columnspan=2, pady=10)
+
+#split screen in half
+Left_team = tk.Frame(root, height=400, width=300)
+Right_team = tk.Frame(root, height=400, width=300)
+
+#code from google
+root.columnconfigure(0, weight=1)
+root.columnconfigure(1, weight=1)
+root.rowconfigure(1, weight=1)
+
+Left_team.grid(row=1, column=0, sticky="nsew")
+Right_team.grid(row=1, column=1, sticky="nsew")
+
+# Put a listbox and apply button inside the left frame
+left_listbox = tk.Listbox(Left_team, height=6, width=30)
+team_colors = ["green", "red", "blue", "purple", "yellow", "white", "black"]
 for colors in team_colors:
-    listbox.insert(tk.END, colors)
-listbox.pack(side = tk.LEFT)
+    left_listbox.insert(tk.END, colors)
+left_listbox.pack(side=tk.LEFT)
 
 # code from google
-def getfromlistbox():
-    sel = listbox.curselection()
+def getfromleftlistbox():
+    sel = left_listbox.curselection()
     if not sel:
         return None
-    return listbox.get(sel[0]).lower()
+    return left_listbox.get(sel[0]).lower()
 
-# Function to update color
-def apply_color():
-    color = getfromlistbox()
+
+def getfromrightlistbox():
+    sel = right_listbox.curselection()
+    if not sel:
+        return None
+    return right_listbox.get(sel[0]).lower()
+
+def applyleftcolor():
+    color = getfromleftlistbox()
     if color:
         Left_team.config(bg=color)
-        root.config(bg=color)
 
-Left_team = tk.Frame(root, bg = getfromlistbox(), height = 400, width = 350)
-Left_team.pack(side=tk.LEFT, padx=40) 
+Apply_Button_left = tk.Button(Left_team, text="Apply Color", command=applyleftcolor)
+Apply_Button_left.pack(side=tk.LEFT)
 
-Apply_Button = tk.Button (Left_team, text = "Apply Color", command = apply_color)
-Apply_Button.pack(side=tk.LEFT, padx=10)
+# Put a listbox and apply button inside the right frame
+right_listbox = tk.Listbox(Right_team, height=6, width=30)
+for colors in team_colors:
+    right_listbox.insert(tk.END, colors)
+right_listbox.pack(side=tk.RIGHT)
 
-Rebound_Button = tk.Button(Left_team, text = "Rebound", command = open_new_interface)
-Rebound_Button.pack()
+def applyrightcolor():
+    color = getfromrightlistbox()
+    if color:
+        Right_team.config(bg=color)
 
-Finish_button = tk.Button(Left_team, text = "Finish", command = end_program)
-Finish_button.pack()
+Apply_Button_right = tk.Button(Right_team, text="Apply Color", command=applyrightcolor)
+Apply_Button_right.pack(side=tk.RIGHT)
+
+#Clear GUI of everything so far
+def cleareverything():
+    for item in firstGUI_list:
+        item.destroy()
 
 
+Completedcolor_button = tk.Button(root, text="Completed Selection", command=cleareverything)
+Completedcolor_button.grid(row=0, column=1, columnspan=2, pady=10)
+
+firstGUI_list = [Apply_Button_left, left_listbox, right_listbox, Apply_Button_right, Completedcolor_button, Color_label]
 
 #Actual program
 
