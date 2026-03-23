@@ -1,12 +1,15 @@
 import tkinter as tk
-import turtle as trtl
+
 
 root = tk.Tk()
+root.geometry("1200x750")
 #Defining Main GUI Functions
 
-root.title("Main interface")
-root.geometry("1200x750")
+start_frame = tk.Frame(root)
+main_frame = tk.Frame(root)
 
+start_frame.grid(row=0, column=0, sticky="nsew")
+main_frame.grid(row=0, column=0, sticky="nsew")
 #code from google
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
@@ -87,18 +90,33 @@ def applyrightcolor():
 Apply_Button_right = tk.Button(Right_team, text="Apply Color", command=applyrightcolor)
 Apply_Button_right.pack(side=tk.RIGHT)
 
-#Clear GUI of everything so far
-def cleareverything():
-    for item in firstGUI_list:
+#Create buttons for next interface, but keep hidden
+Rebound_button = tk.Button(Left_team, text = "Rebound", command = open_new_interface)
+Finish_button = tk.Button(Left_team, text = "Finish", command = end_program)
+
+#Clear GUI of everything so far 
+
+def cleareverything(list):
+    for item in list:
         item.destroy()
+    if list == firstGUI_list:
+        Completed_color_button.destroy()
+        
+        #Show buttons after click
+        Rebound_button.pack()
+        Finish_button.pack()
+        
+    start_frame.grid_remove()
+    main_frame.grid()
+    
 
+firstGUI_list = [Apply_Button_left, left_listbox, right_listbox, Apply_Button_right, Color_label]
 
-Completedcolor_button = tk.Button(root, text="Completed Selection", command=cleareverything)
-Completedcolor_button.grid(row=0, column=1, columnspan=2, pady=10)
+Completed_color_button = tk.Button(root, text="Completed Selection", command=lambda:cleareverything(firstGUI_list))
+Completed_color_button.grid(row=0, column=1, columnspan=2, pady=10)
 
-firstGUI_list = [Apply_Button_left, left_listbox, right_listbox, Apply_Button_right, Completedcolor_button, Color_label]
+#Main program
 
-#Actual program
 
 
 root.mainloop()
