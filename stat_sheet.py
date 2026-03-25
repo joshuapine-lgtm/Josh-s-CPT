@@ -1,6 +1,25 @@
 import tkinter as tk
 
+#Create player numbers
 
+Left_team_player_list=[]
+Count = 0
+Player = input("Enter a player's number from the first team")
+while Count != 5:
+    Left_team_player_list.append(Player)
+    Count = Count + 1
+    if Count != 5:
+     Player = input("Enter a different player's number from the first team")
+
+Right_team_player_list=[]
+count = 0
+Player = input("Enter a player's number from the second team")
+while count != 5:
+    Right_team_player_list.append(Player)
+    count = count + 1
+    if count != 5:
+     Player = input("Enter a different player's number from the second team")
+     
 root = tk.Tk()
 root.geometry("1200x750")
 #Defining Main GUI Functions
@@ -90,11 +109,15 @@ def applyrightcolor():
 Apply_Button_right = tk.Button(Right_team, text="Apply Color", command=applyrightcolor)
 Apply_Button_right.pack(side=tk.RIGHT)
 
+#Opens interface with player numbers
+def open_number_interface():
+    open_new_interface()
+
 #Create buttons for next interface, but keep hidden
-Rebound_button = tk.Button(Left_team, text = "Rebound", command = open_new_interface)
+Rebound_button = tk.Button(Left_team, text = "Rebound", command = open_number_interface)
 Finish_button = tk.Button(Left_team, text = "Finish", command = end_program)
 
-#Clear GUI of everything so far 
+#Clear GUI of everything so far (Procedure)
 
 def cleareverything(list):
     for item in list:
@@ -102,21 +125,14 @@ def cleareverything(list):
     if list == firstGUI_list:
         Completed_color_button.destroy()
         
-        #Show buttons after click
-        Rebound_button.pack()
-        Finish_button.pack()
+        #Show buttons after click of completed color button
+        Rebound_button.pack(side=tk.LEFT)
+        Finish_button.pack(side=tk.LEFT)
         
-    start_frame.grid_remove()
-    main_frame.grid()
-    
 
 firstGUI_list = [Apply_Button_left, left_listbox, right_listbox, Apply_Button_right, Color_label]
 
 Completed_color_button = tk.Button(root, text="Completed Selection", command=lambda:cleareverything(firstGUI_list))
 Completed_color_button.grid(row=0, column=1, columnspan=2, pady=10)
-
-#Main program
-
-
 
 root.mainloop()
