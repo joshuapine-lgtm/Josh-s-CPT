@@ -117,6 +117,7 @@ for player in Left_team_player_list:
 def Chose_player(win, player_ind, stat, points):
     #Uses player's index to find their actual jersey number
     player_num = Left_team_player_list[player_ind]
+    player_ind = player_ind 
     t = True
     if stat != "pts":
         Left_team_stats[player_num][stat] += 1
@@ -166,7 +167,7 @@ def applyptselection():
 
 Apply_Button_pt = tk.Button(Left_team, text="Done selecting points", command=applyptselection)
 
-#Clear GUI of everything so far (Procedure)
+#Clear GUI of everything so far 
 
 def cleareverything(list):
     for item in list:
@@ -180,12 +181,53 @@ def cleareverything(list):
         Assist_button.pack(side=tk.TOP)
         Rebound_button.pack(side=tk.TOP)
         Finish_button.pack(side=tk.TOP)
-    else: 
-        something()
+        Stat_sheet_btn.pack(side=tk.BOTTOM)
+    else:
+        Stat_sheet_btn.destroy()
+        show_stat_sheet()
 
 firstGUI_list = [Apply_Button_left, left_listbox, right_listbox, Apply_Button_right, Color_label]
-
+secondGUI_list = [Rebound_button, Assist_button, Finish_button, leftpt_listbox, Apply_Button_pt]
+    
 Completed_color_button = tk.Button(root, text="Completed Selection", command=lambda:cleareverything(firstGUI_list))
 Completed_color_button.grid(row=0, column=1, columnspan=2, pady=10)
 
+#Final Stats
+Stat_sheet_btn = tk.Button(Left_team, text = "Show Final Stats (not reversible)", command=lambda:cleareverything(secondGUI_list))
+
+#Chat GPT
+def show_stat_sheet():
+    stat_window = tk.Toplevel(root)
+    stat_window.geometry("1000x300")
+
+    bg_image = tk.PhotoImage(file="Screenshot 2026-03-29 191203.png") 
+    stat_window.bg_image = bg_image  # keep reference
+
+    canvas = tk.Canvas(stat_window, width=1000, height=300)
+    canvas.pack(fill="both", expand=True)
+
+    canvas.create_image(0, 0, image=bg_image, anchor="nw")
+    canvas.create_image(500, 0, image=bg_image, anchor="nw")
+
+
+    start_y = 77
+    row_spacing = 36   # also increase this so rows don’t overlap
+
+    for i, player in enumerate(Left_team_player_list):
+        y = start_y + i * row_spacing
+
+        stats = Left_team_stats[player]
+
+        # Player number
+        canvas.create_text(20, y, text=player, font=("Arial", 12, "bold"))
+
+        # Points
+        canvas.create_text(120, y, text=stats["pts"], font=("Arial", 12))
+
+        # Rebounds
+        canvas.create_text(260, y, text=stats["reb"], font=("Arial", 12))
+
+        # Assists
+        canvas.create_text(380, y, text=stats["assists"], font=("Arial", 12))
+    
 root.mainloop()
