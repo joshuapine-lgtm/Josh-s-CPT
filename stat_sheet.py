@@ -20,19 +20,24 @@ while count != 5:
      Player = input("Enter a different player's number from the second team ")
 
 #Create main window
+
+#Create main window
 root = tk.Tk()
 root.geometry("1200x750")
+
 
 #Defining Main GUI Functions
 start_frame = tk.Frame(root)
 main_frame = tk.Frame(root)
 
 #Code from chatGPT to configure grid and frames
+#Code from chatGPT to configure grid and frames
 start_frame.grid(row=0, column=0, sticky="nsew")
 main_frame.grid(row=0, column=0, sticky="nsew")
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
 root.rowconfigure(1, weight=1)
+#Chatgpt code end
 #Chatgpt code end
 
 #Interface creation and deletion defined
@@ -45,8 +50,12 @@ def open_new_interface():
     return new_window
 
 #Close wanted window
+
+#Close wanted window
 def close_new(win):
     win.destroy()
+     
+#End program
      
 #End program
 def end_program():
@@ -62,11 +71,13 @@ Left_team = tk.Frame(root, height=400, width=300)
 Right_team = tk.Frame(root, height=400, width=300)
 
 #Code from chatGPT to configure grid and frames
+#Code from chatGPT to configure grid and frames
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
 root.rowconfigure(1, weight=1)
 Left_team.grid(row=1, column=0, sticky="nsew")
 Right_team.grid(row=1, column=1, sticky="nsew")
+#Chatgpt code end
 #Chatgpt code end
 
 # Put a listbox and apply button inside the left frame
@@ -76,6 +87,7 @@ for colors in team_colors:
     left_listbox.insert(tk.END, colors)
 left_listbox.pack(side=tk.LEFT)
 
+#GUI project code
 #GUI project code
 def getfromleftlistbox():
     sel = left_listbox.curselection()
@@ -90,7 +102,9 @@ def getfromrightlistbox():
         return None
     return right_listbox.get(sel[0]).lower()
 #GUI project code end
+#GUI project code end
 
+#Apply color selected in left listbox
 #Apply color selected in left listbox
 def applyleftcolor():
     color = getfromleftlistbox()
@@ -100,6 +114,7 @@ def applyleftcolor():
 Apply_Button_left = tk.Button(Left_team, text="Apply Color", command=applyleftcolor)
 Apply_Button_left.pack(side=tk.LEFT)
 
+#Put a listbox and apply button inside the right frame
 #Put a listbox and apply button inside the right frame
 right_listbox = tk.Listbox(Right_team, height=6, width=30)
 for colors in team_colors:
@@ -114,6 +129,7 @@ def applyrightcolor():
 Apply_Button_right = tk.Button(Right_team, text="Apply Color", command=applyrightcolor)
 Apply_Button_right.pack(side=tk.RIGHT)
 
+#Chat gpt code to create dictionaries to store stats
 #Chat gpt code to create dictionaries to store stats
 Left_team_stats = {}
 
@@ -136,9 +152,29 @@ def Chose_player(win, team, player_ind, stat, points):
         player_num = Right_team_player_list[player_ind]
         stats_dict = Right_team_stats
 
+Right_team_stats = {}
+
+for player in Right_team_player_list:
+    Right_team_stats[player] = {"pts": 0, "reb": 0, "assists": 0}
+#Chat gpt code end
+
+#Function to update stats when player is chosen on chosen stat (Procedure)
+def Chose_player(win, team, player_ind, stat, points):
+    if team == "left":
+        #Uses player index to get actual player number and determines team dictionary to update
+        player_num = Left_team_player_list[player_ind]
+        stats_dict = Left_team_stats
+    else:
+        player_num = Right_team_player_list[player_ind]
+        stats_dict = Right_team_stats
+
     if stat != "pts":
         stats_dict[player_num][stat] += 1
+        stats_dict[player_num][stat] += 1
     else:
+        stats_dict[player_num][stat] += int(points)
+    #Prints out updated stats so user can always have a backup of the stats
+    print("Player", player_num, stat + ":", stats_dict[player_num][stat])
         stats_dict[player_num][stat] += int(points)
     #Prints out updated stats so user can always have a backup of the stats
     print("Player", player_num, stat + ":", stats_dict[player_num][stat])
@@ -157,7 +193,23 @@ def create_player_buttons(new_window, team, stat, points):
         #i=i makes it so each lambda function has its own copy of i, so the buttons won't each be the last player in the list (as it finishes iterating through the loop before being pressed)
         btn = tk.Button(new_window,text=player_list[i],command=lambda i=i: Chose_player(new_window, team, i, stat, points))
         btn.pack()
+#Creates player buttons (Procedure)
+def create_player_buttons(new_window, team, stat, points):
+    num_of_players = 5
+    #Determines team amd creates buttons that co
+    if team == "left":
+        player_list = Left_team_player_list
+    else:
+        player_list = Right_team_player_list
+    #Creates 5 buttons for each player and uses 5 as per the number of player in the game on a basketball team
+    for i in range(num_of_players):
+        #i=i makes it so each lambda function has its own copy of i, so the buttons won't each be the last player in the list (as it finishes iterating through the loop before being pressed)
+        btn = tk.Button(new_window,text=player_list[i],command=lambda i=i: Chose_player(new_window, team, i, stat, points))
+        btn.pack()
 #Opens interface with player numbers
+def open_number_interface(team,stats,points):
+    new_window = open_new_interface() 
+    create_player_buttons(new_window,team,stats,points)
 def open_number_interface(team,stats,points):
     new_window = open_new_interface() 
     create_player_buttons(new_window,team,stats,points)
@@ -165,8 +217,16 @@ def open_number_interface(team,stats,points):
 #Left team stat buttons defined but not packed so they are hidden until color selection is done
 Rebound_button = tk.Button(Left_team, text = "Rebound", command=lambda: open_number_interface("left", "reb", 0))
 Assist_button = tk.Button(Left_team, text = "Assist", command=lambda: open_number_interface("left", "assists", 0))
+#Left team stat buttons defined but not packed so they are hidden until color selection is done
+Rebound_button = tk.Button(Left_team, text = "Rebound", command=lambda: open_number_interface("left", "reb", 0))
+Assist_button = tk.Button(Left_team, text = "Assist", command=lambda: open_number_interface("left", "assists", 0))
 Finish_button = tk.Button(Left_team, text = "Finish", command=lambda: end_program())
 
+#Right team stat buttons defined but not packed so they are hidden until color selection is done
+Rebound_button_R = tk.Button(Right_team, text="Rebound",command=lambda: open_number_interface("right", "reb", 0))
+Assist_button_R = tk.Button(Right_team, text="Assist",command=lambda: open_number_interface("right", "assists", 0))
+
+#Points have their own listbox to account for freethrows, middys, and threes
 #Right team stat buttons defined but not packed so they are hidden until color selection is done
 Rebound_button_R = tk.Button(Right_team, text="Rebound",command=lambda: open_number_interface("right", "reb", 0))
 Assist_button_R = tk.Button(Right_team, text="Assist",command=lambda: open_number_interface("right", "assists", 0))
@@ -178,6 +238,8 @@ for options in pt_options:
     leftpt_listbox.insert(tk.END, options)
 
 #Code from GUI project to get points from listbox and apply to player stats
+
+#Code from GUI project to get points from listbox and apply to player stats
 def get_from_leftpt_listbox():
     sel = leftpt_listbox.curselection()
     if not sel:
@@ -186,6 +248,7 @@ def get_from_leftpt_listbox():
 
 def applyptselection():
     points = get_from_leftpt_listbox()
+    open_number_interface("left","pts", points)
     open_number_interface("left","pts", points)
 
 #Points have their own listbox to account for freethrows, middys, and threes
@@ -205,8 +268,26 @@ def applyptselection_right():
     open_number_interface("right", "pts", points)
 
 Apply_Button_pt_R = tk.Button(Right_team, text="Done selecting points", command=applyptselection_right)
+#Points have their own listbox to account for freethrows, middys, and threes
+rightpt_listbox = tk.Listbox(Right_team, height=3, width=30)
+for options in pt_options:
+    rightpt_listbox.insert(tk.END, options)
+
+#Code from GUI project to get points from listbox and apply to player stats
+def get_from_rightpt_listbox():
+    sel = rightpt_listbox.curselection()
+    if not sel:
+        return None
+    return rightpt_listbox.get(sel[0]).lower()
+
+def applyptselection_right():
+    points = get_from_rightpt_listbox()
+    open_number_interface("right", "pts", points)
+
+Apply_Button_pt_R = tk.Button(Right_team, text="Done selecting points", command=applyptselection_right)
 Apply_Button_pt = tk.Button(Left_team, text="Done selecting points", command=applyptselection)
 
+#Clear GUI of everything so far
 #Clear GUI of everything so far
 def cleareverything(list):
     for item in list:
@@ -229,9 +310,22 @@ def cleareverything(list):
         #Show final stat sheet and destroy button
         Stat_sheet_btn.destroy()
         show_stat_sheet()
+        Stat_sheet_btn.pack(side=tk.BOTTOM)
+        Finish_button.pack(side=tk.BOTTOM)
+        rightpt_listbox.pack(side=tk.TOP)
+        Apply_Button_pt_R.pack(side=tk.TOP)
+        Assist_button_R.pack(side=tk.TOP)
+        Rebound_button_R.pack(side=tk.TOP)
+    else:
+        #Show final stat sheet and destroy button
+        Stat_sheet_btn.destroy()
+        show_stat_sheet()
 
 #Lists to determine which buttons to clear when either completed color selection or show stat sheet button is pressed
+#Lists to determine which buttons to clear when either completed color selection or show stat sheet button is pressed
 firstGUI_list = [Apply_Button_left, left_listbox, right_listbox, Apply_Button_right, Color_label]
+secondGUI_list = [Rebound_button, Assist_button, Finish_button, leftpt_listbox, Apply_Button_pt]
+    
 secondGUI_list = [Rebound_button, Assist_button, Finish_button, leftpt_listbox, Apply_Button_pt]
     
 Completed_color_button = tk.Button(root, text="Completed Selection", command=lambda:cleareverything(firstGUI_list))
@@ -245,7 +339,7 @@ def show_stat_sheet():
     stat_window.geometry("1000x300")
 
     #Chat GPT code to add background image and also create canvas to put stats on top of background image
-    bg_image = tk.PhotoImage(file="Screenshot 2026-03-29 191203.png") 
+    bg_image = tk.PhotoImage(file="Stat_sheet_paper.png") 
     stat_window.bg_image = bg_image  # keep reference
 
     canvas = tk.Canvas(stat_window, width=1000, height=300)
